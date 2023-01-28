@@ -343,9 +343,9 @@ export default {
       adCollapsed: false,
       pageScrolling: 0,
 
-      uiLang: 'zh',
+      uiLang: 'en',
       ui,
-      cardLang: 'zh',
+      cardLang: 'en',
       cardMeta,
 
       holo: true,
@@ -864,7 +864,7 @@ export default {
       const data = ygoproData[key]
       if (!data)
         return false
-      this.cardLang = "zh"
+      this.cardLang = "en"
       this.cardRare = data.rare
       this.titleColor = data.color
       this.cardTitle = data.title
