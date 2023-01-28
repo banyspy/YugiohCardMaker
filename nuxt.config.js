@@ -32,7 +32,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '遊戲王 卡片製造機',
+    title: 'Yugioh Card maker',
     htmlAttrs: {
       lang: 'zh-tw'
     },

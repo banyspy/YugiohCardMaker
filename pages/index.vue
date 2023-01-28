@@ -261,7 +261,7 @@
                 </b-col>
 
                 <!-- 連結區 -->
-                <b-col v-show="isLinkMonster" cols="4" class="px-2">
+                <b-col v-show="isLinkMonster || isLinkSpell" cols="4" class="px-2">
                   <label>{{ ui[uiLang].link }}</label>
                   <table>
                     <tr v-for="row in [0,1,2]" :key="row">
@@ -371,7 +371,7 @@ export default {
       Pendulum: true,
       Special: true,
       cardLevel: '12',
-      cardLevelOpts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      cardLevelOpts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
       cardBLUE: 12,
       cardRED: 12,
       pendulumSize: 23,
@@ -432,6 +432,8 @@ export default {
           'Equip': this.ui[this.uiLang].st_card.equip,
           'Quick': this.ui[this.uiLang].st_card.quick,
           'Ritual': this.ui[this.uiLang].st_card.ritual,
+          // This is for Link spell
+          'Link': this.ui[this.uiLang].m_card.link,
         },
         "Trap": {
           'Normal': this.ui[this.uiLang].st_card.normal,
@@ -506,6 +508,9 @@ export default {
     },
     isLinkMonster () {
       return this.cardType==='Monster' && this.cardSubtype==='Link'
+    },
+    isLinkSpell () {
+      return this.cardType==='Spell' && this.cardSubtype==='Link'
     },
     canPendulumEnabled() {
       return this.cardType==='Monster' && !["Slifer", "Ra", "Obelisk", "LDragon"].includes(this.cardSubtype)
@@ -717,7 +722,7 @@ export default {
 
         // 怪獸等級 / 階級 / 連結
         ctx.textAlign = "left";
-        if (!this.isLinkMonster) { // 非連結怪獸
+        if (!(this.isLinkMonster)) { // 非連結怪獸
           for(let i=1; i<=this.cardLevel; i++)
             ctx.drawImage(this.imgs.levelOrSubtype, (this.isXyzMonster? (122+(i-1)*63): (820-(i-1)*63)), 181, 58, 58);
         } else {                   // 連結怪獸
@@ -735,8 +740,15 @@ export default {
         const typeText = (this.cardType==="Spell"? langStr.Spell: langStr.Trap) + (this.cardSubtype==='Normal'? "": langStr.SEP)
         ctx.textAlign = "right";
         ctx.fillText(`${langStr.QUOTE_L}${typeText}${langStr.QUOTE_R}`, 920+offset.sX1, 222+offset.sY1); // 魔罠卡
-        if (this.cardSubtype!=='Normal')
-          ctx.drawImage(this.imgs.levelOrSubtype, 820+offset.sX2, 178+offset.sY2, 58, 58);        // 魔罠子類別
+        if ((this.isLinkSpell)) { // 非連結怪獸
+        const linkStr = "Link";
+          for(let i=1; i<=9; i++)
+            if(i!==5 && this.links[i].val)
+              ctx.drawImage(this.imgs[`link${i}`], 
+                linkPosition[linkStr].X[i-1], linkPosition[linkStr].Y[i-1], 
+                linkPosition[linkStr].W[i-1], linkPosition[linkStr].H[i-1]
+              );
+        }
       }
     },
 
